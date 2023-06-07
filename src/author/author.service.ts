@@ -1,6 +1,6 @@
 import {db} from "../db.server";
 
-type Author = {
+export type Author = {
     id: number;
     firstName: string;
     lastName: string;
@@ -31,7 +31,8 @@ export const findAuthorById = async (id: number): Promise<Author | null> => {
 }
 
 //Create a new author
-export const createAuthor = async (firstName: string, lastName: string): Promise<Author> => {
+export const createAuthor = async (author : Omit<Author, "id">): Promise<Author> => {
+    const {firstName, lastName} = author;
     return db.author.create({
         data: {
             firstName: firstName,
@@ -46,7 +47,9 @@ export const createAuthor = async (firstName: string, lastName: string): Promise
 }
 
 //Update an existing author
-export const updateAuthor = async (id: number, firstName: string, lastName: string): Promise<Author | null> => {
+//Omit the id field from the author object since we don't want to update the id field
+export const updateAuthor = async (author : Omit<Author, "id">,id:number  ): Promise<Author | null> => {
+    const {firstName, lastName} = author;
     return db.author.update({
         where: {
             id: id
@@ -64,16 +67,11 @@ export const updateAuthor = async (id: number, firstName: string, lastName: stri
 }
 
 //Delete an existing author
-export const deleteAuthor = async (id: number): Promise<Author | null> => {
-    return db.author.delete({
+export const deleteAuthor = async (id: number): Promise<void> => {
+    await db.author.delete({
         where: {
             id: id
         },
-        select: {
-            id: true,
-            firstName: true,
-            lastName: true
-        }
     });
 }
 
