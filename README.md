@@ -1,4 +1,4 @@
-# Prisma Typescript Example
+# Prisma Typescript Example1
 
 ## Description
 
